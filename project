@@ -1,0 +1,149 @@
+import pickle
+def write():
+    f=open("binaryfile.dat","wb")
+    record=[]
+    while True:
+        print()
+        name=input("Enter sport name:")
+        uid=int(input("Enter sport ID:"))
+        no=int(input("Enter no of players enlisted:"))
+        fee=int(input("Enrollment fees:₹"))
+        data=[name,uid,no,fee]
+        record.append(data)
+        ch=input("do you want to enter more records? (y/n):")
+        print()
+        if ch.lower()=='n':
+            break
+    pickle.dump(record,f)
+    f.close()
+    print("Records successfully added...")
+    print()
+    
+def read():
+    f=open("binaryfile.dat","rb")
+    a=pickle.load(f)
+    for i in a:
+        print()
+        print("Sport name:",i[0])
+        print("Sport ID:",i[1])
+        print("No of players enlisted:",i[2])
+        print("Enrollment fee:",i[3])
+        print()
+    f.close()
+    
+def update():
+    f=open("binaryfile.dat",'rb+')
+    a=pickle.load(f)
+    found=0
+    name=input("Enter name of Sport that you want to update:")
+    for i in a:
+        if name==i[0]:
+            print("Sport name:",i[0])
+            print("Sport ID:",i[1])
+            print("Current no of players:",i[2])
+            print("Current enrollment fees:₹",i[3])
+            i[2]=int(input("Enter new number of players:"))
+            i[3]=int(input("Enter new enrollment fees:₹"))
+            print()
+            print("Updated successfully!")
+            found=1
+            break
+    if found==0:
+        print("Record not found...")
+    else:
+        f.seek(0)
+        pickle.dump(a,f)
+    f.close()
+    
+def search_id():
+    f=open("binaryfile.dat","rb")
+    a=pickle.load(f)
+    found=0
+    uid=int(input("Enter ID of sport that you want to search:"))
+    for i in a:
+        if i[1]==uid:
+            print()
+            print("Record found successfully...")
+            print()
+            print("Sport name:",i[0])
+            print("Sport ID:",i[1])
+            print("No of players enlisted:",i[2])
+            print("Enrollment fee:",i[3])
+            print()
+            found=1
+    if found==0:
+        print()
+        print("Record not found")
+        print()
+        
+def search_name():
+    f=open("binaryfile.dat","rb")
+    a=pickle.load(f)
+    found=0
+    name=input("Enter name of sport that you want to search:")
+    for i in a:
+        if i[0]==name:
+            print()
+            print("Record found successfully...")
+            print()
+            print("Sport name:",i[0])
+            print("Sport ID:",i[1])
+            print("No of players enlisted:",i[2])
+            print("Enrollment fee:",i[3])
+            print()
+            found=1
+    if found==0:
+        print()
+        print("Record not found")
+        print()
+        
+def delete():
+    f=open("binaryfile.dat",'rb+')
+    a=pickle.load(f)
+    record=[]
+    found=1
+    uid=int(input("Enter ID of sport that you want to delete:"))
+    for i in a:
+        if i[1]==uid:
+            found=0
+        else:
+            record.append(i)
+            found=1
+    if found==1:
+        print("Record successfully deleted!")
+        f.seek(0)
+        pickle.dump(record,f)
+    f.close()
+    
+while True:
+    print(40*'=')
+    print("""           Main Menu
+
+       1. Write record
+       2. Read and display all records
+       3. Update record 
+       4. Search record by sport ID
+       5. Search record by sport name
+       6. Delete record
+       7. Exit
+""")
+    
+    print(40*'=')
+    c=int(input("Enter your choice:"))
+    if c==1:
+        write()
+    elif c==2:
+        read()
+    elif c==3:
+        update()
+    elif c==4:
+        search_id()
+    elif c==5:
+        search_name()
+    elif c==6:
+        delete()
+    elif c==7:
+        print("END")
+        break
+    else:
+        print("Invalid choice")
